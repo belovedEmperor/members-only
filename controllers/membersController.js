@@ -60,7 +60,7 @@ const validateSignupInfo = [
 
 function signupGet(req, res) {
   if (req.isAuthenticated()) {
-    return res.redirect("/", { message: "You are already logged in." });
+    return res.redirect("/");
   }
   res.render("signupForm");
 }
@@ -89,14 +89,14 @@ const signupPost = [
 
 function loginGet(req, res) {
   if (req.isAuthenticated()) {
-    return res.redirect("/", { message: "You are already logged in." });
+    return res.redirect("/");
   }
   res.render("loginForm");
 }
 
 const loginPost = [
   validateLoginInfo,
-  async (req, res) => {
+  (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).render("loginForm", {
@@ -112,7 +112,7 @@ const loginPost = [
   },
 ];
 
-async function logoutPost(req, res, next) {
+function logoutPost(req, res, next) {
   req.logout((err) => {
     if (err) {
       return next(err);
@@ -121,4 +121,35 @@ async function logoutPost(req, res, next) {
   });
 }
 
-module.exports = { signupGet, signupPost, loginGet, loginPost, logoutPost };
+function secretGet(req, res) {
+  if (!req.isAuthenticated()) {
+    return res.redirect("/");
+  }
+  res.render("secretForm");
+}
+
+async function secretPost(req, res, next) {
+  if (!req.isAuthenticated()) {
+    res.redirect("/", { message: "You are not logged in." });
+  }
+
+  if (req.body.secretCode === process.env.MEMBER_SECRET) {
+    await db.updateUserToMember(req.user.id);
+    next();
+  } else if (req.body.secretCode === process.env.ADMIN_SECRET) {
+    await db.updateUserToAdmin(req.user.id);
+    next();
+  }
+
+  res.redirect("/");
+}
+
+module.exports = {
+  signupGet,
+  signupPost,
+  loginGet,
+  loginPost,
+  logoutPost,
+  secretGet,
+  secretPost,
+};
