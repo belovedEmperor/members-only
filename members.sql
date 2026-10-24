@@ -15,7 +15,7 @@ CREATE TABLE messages (
     text TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     user_id INTEGER REFERENCES users(id)
-)
+);
 
 CREATE TABLE "session" (
   "sid" varchar NOT NULL COLLATE "default",
