@@ -63,7 +63,7 @@ const validateSignupInfo = [
     .withMessage(`Password confirmation ${whitespaceErr}`),
 ];
 
-function signupGet(req, res, next) {
+function signupGet(req, res) {
   res.render("signupForm");
 }
 
@@ -89,8 +89,11 @@ const signupPost = [
   },
 ];
 
-function loginGet(req, res, next) {
-  res.render("loginForm");
+function loginGet(req, res) {
+  res.render("loginForm", {
+    errors: req.session.messages?.map((msg) => msg.message ?? msg),
+  });
+  req.session.messages = [];
 }
 
 const loginPost = [
@@ -120,7 +123,7 @@ function logoutGet(req, res, next) {
   });
 }
 
-function secretGet(req, res, next) {
+function secretGet(req, res) {
   res.render("secretForm");
 }
 
@@ -145,7 +148,7 @@ async function messagesGet(req, res) {
   res.render("home", { messages });
 }
 
-async function newMessageGet(req, res, next) {
+async function newMessageGet(req, res) {
   res.render("newMessageForm");
 }
 

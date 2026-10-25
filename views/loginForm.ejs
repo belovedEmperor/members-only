@@ -26,13 +26,5 @@
 			<% } %>
 			</ul>
 		<% } %>
-
-		<% if (req.session.messages) { %>
-			<ul>
-			<% for (const message of req.session.messages) { %>
-				<li><%= message %></li>
-			<% } %>
-			</ul>
-		<% } %>
 	</body>
 </html>
