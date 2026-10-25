@@ -124,13 +124,17 @@ function secretGet(req, res, next) {
   res.render("secretForm");
 }
 
-async function secretPost(req, res, next) {
-  if (req.body.secretCode === process.env.MEMBER_SECRET) {
+async function secretPost(req, res) {
+  if (
+    req.body.secretCode === process.env.MEMBER_SECRET &&
+    req.user.membership_status === "normie"
+  ) {
     await db.updateUserToMember(req.user.id);
-    next();
-  } else if (req.body.secretCode === process.env.ADMIN_SECRET) {
+  } else if (
+    req.body.secretCode === process.env.ADMIN_SECRET &&
+    req.user.membership_status !== "admin"
+  ) {
     await db.updateUserToAdmin(req.user.id);
-    next();
   }
 
   res.redirect("/");
@@ -138,10 +142,6 @@ async function secretPost(req, res, next) {
 
 async function messagesGet(req, res) {
   let messages = await db.getAllMessages();
-  for (const message of messages) {
-    const user = await db.getUser(message.user_id);
-    message.name = `${user.first_name} ${user.last_name}`;
-  }
   res.render("home", { messages });
 }
 
@@ -150,8 +150,8 @@ async function newMessageGet(req, res, next) {
 }
 
 const validateMessage = [
-  body("title").trim().notEmpty().withMessage(`Email ${emptyErr}`),
-  body("text").trim().notEmpty().withMessage(`Email ${emptyErr}`),
+  body("title").trim().notEmpty().withMessage(`Title ${emptyErr}`),
+  body("text").trim().notEmpty().withMessage(`Body ${emptyErr}`),
 ];
 
 const newMessagePost = [

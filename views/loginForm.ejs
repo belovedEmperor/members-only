@@ -14,7 +14,7 @@
 			</label>
 			<label>
 				Password:
-				<input type="text" name="password" id="password" placeholder="Password" required>
+				<input type="password" name="password" id="password" placeholder="Password" required>
 			</label>
 			<button type="submit">Log In</button>
 		</form>
@@ -23,6 +23,14 @@
 			<ul>
 			<% for (const error of errors) { %>
 				<li><%= error.msg %></li>
+			<% } %>
+			</ul>
+		<% } %>
+
+		<% if (req.session.messages) { %>
+			<ul>
+			<% for (const message of req.session.messages) { %>
+				<li><%= message %></li>
 			<% } %>
 			</ul>
 		<% } %>

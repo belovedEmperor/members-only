@@ -31,7 +31,7 @@ passport.use(
       try {
         const { rows } = await pool.query(
           "SELECT * FROM users WHERE email = $1",
-          [email],
+          [email.toLowerCase()],
         );
         const user = rows[0];
 

@@ -2,7 +2,7 @@
     <h3><%= message.title %></h3>
     <p><%= message.text %></p>
     <% if (locals.currentUser && (locals.currentUser.membership_status === 'member' || locals.currentUser.membership_status === 'admin')) { %>
-        <small><%= message.name %></small>
+        <small><%= message.first_name %> <%= message.last_name %></small>
         <small><%= message.created_at %></small>
     <% } %>
     <% if (locals.currentUser && locals.currentUser.membership_status === 'admin') { %>

@@ -3,7 +3,7 @@ const pool = require("./pool");
 async function insertUser(firstName, lastName, email, password) {
   await pool.query(
     "INSERT INTO users (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)",
-    [firstName, lastName, email, password],
+    [firstName, lastName, email.toLowerCase(), password],
   );
 }
 
@@ -22,7 +22,11 @@ async function updateUserToAdmin(id) {
 }
 
 async function getAllMessages() {
-  return (await pool.query("SELECT * FROM messages")).rows;
+  return (
+    await pool.query(
+      "SELECT messages.id, messages.title, messages.text, messages.created_at, users.first_name, users.last_name FROM messages LEFT JOIN users ON messages.user_id = users.id",
+    )
+  ).rows;
 }
 
 async function getUser(id) {
