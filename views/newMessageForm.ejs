@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>New Message</title>
+	</head>
+	<body>
+		<h1>New Message</h1>
+		<form action="/new" method="POST">
+			<label>
+				Title:
+				<input type="text" name="title" id="title" placeholder="Title" required>
+			</label>
+			<label>
+				Body:
+				<textarea name="text" id="text" required></textarea>
+			</label>
+			<button type="submit">Post message</button>
+		</form>
+
+		<% if (locals.errors) { %>
+			<ul>
+			<% for (const error of errors) { %>
+				<li><%= error.msg %></li>
+			<% } %>
+			</ul>
+		<% } %>
+	</body>
+</html>

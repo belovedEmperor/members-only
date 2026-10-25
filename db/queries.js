@@ -21,4 +21,31 @@ async function updateUserToAdmin(id) {
   );
 }
 
-module.exports = { insertUser, updateUserToMember, updateUserToAdmin };
+async function getAllMessages() {
+  return (await pool.query("SELECT * FROM messages")).rows;
+}
+
+async function getUser(id) {
+  return (await pool.query("SELECT * FROM users WHERE id = $1", [id])).rows[0];
+}
+
+async function insertMessage(title, text, id) {
+  await pool.query(
+    "INSERT INTO messages (title, text, user_id) VALUES ($1, $2, $3)",
+    [title, text, id],
+  );
+}
+
+async function deleteMessage(id) {
+  await pool.query("DELETE FROM messages WHERE id = $1", [id]);
+}
+
+module.exports = {
+  insertUser,
+  updateUserToMember,
+  updateUserToAdmin,
+  getAllMessages,
+  getUser,
+  insertMessage,
+  deleteMessage,
+};

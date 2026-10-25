@@ -1,0 +1,15 @@
+<div>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signup">Signup</a></li>
+            <% if (locals.currentUser && locals.currentUser.membership_status !== 'admin') { %>
+                <li><a href="/secret">Secret</a></li>
+            <% } %>
+            <% if (locals.currentUser) { %>
+                <li><a href="/logout">Logout</a></li>
+            <% } %>
+        </ul>
+    </nav>
+</div>
